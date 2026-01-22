@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Maud Crawler</title>
+</head>
+<body>
+    <h1>Start Crawl</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input
+            type="text"
+            name="seed_url"
+            placeholder="https://example.com"
+            style="width: 300px;"
+            required
+        />
+        <button type="submit" name="action" value="crawl">
+            Crawl
+        </button>
+    </form>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="action" value="wipe" onclick="return confirm('Wipe DB?');">
+            Wipe DB
+        </button>
+        <span>Use for dev purposes to wipe DB if testing the same url</span>
+    </form>
+</body>
+</html>
