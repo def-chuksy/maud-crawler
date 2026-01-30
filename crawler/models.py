@@ -5,6 +5,7 @@ from django.db import models
 class URL(models.Model):
     url = models.URLField(unique=True)
     visited = models.BooleanField(default=False)
+    processing = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

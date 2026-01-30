@@ -1,16 +1,25 @@
-import requests
+import aiohttp
+import asyncio
+import logging
 
-'''
-fetch html data
-possible extension:
-'''
-def fetch(url: str) -> dict:
+logger = logging.getLogger(__name__)
+
+async def fetch(url: str, session: aiohttp.ClientSession) -> dict:
+    """
+    Async fetch using a shared aiohttp session.
+    Returns a dict with 'html' key.
+    """
     try:
-        res = requests.get(url, timeout=10)
-        res.raise_for_status()
+        logger.info(f"Starting async HTTP request for {url}")
+        async with session.get(url, timeout=10) as resp:
+            resp.raise_for_status()
+            html = await resp.text()
+            logger.info(f"Completed async fetch for {url}")
+            return {"html": html}
 
-        return {
-            "html": res.text
-        }
-    except requests.exceptions.RequestException as e:
-        raise Exception(f"{e}") from e 
+    except aiohttp.ClientError as e:
+        logger.error(f"HTTP request failed for {url}: {e}")
+        raise
+    except asyncio.TimeoutError:
+        logger.error(f"HTTP request timed out for {url}")
+        raise
